@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -89,7 +91,24 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-        return -1;
+        NumberTriangle current_number_triangle;
+        if (path.charAt(0) == 'l') {
+            current_number_triangle = this.left;
+        }
+        else {
+            current_number_triangle = this.right;
+        }
+        int i = 1;
+        while (i < path.length()) {
+            if (path.charAt(i) == 'l') {
+                current_number_triangle = current_number_triangle.left;
+            }
+            else if (path.charAt(i) == 'r') {
+                current_number_triangle = current_number_triangle.right;
+            }
+            i++;
+        }
+        return current_number_triangle.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,19 +129,34 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
+        NumberTriangle top;
 
         String line = br.readLine();
+        top = new NumberTriangle(Integer.parseInt(line));
+        List<NumberTriangle> previous = new Vector<>();
+        previous.add(top);
+        line = br.readLine();
+
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] divisions = line.split(" ");
+            List<NumberTriangle> current = new Vector<>();
+            for (int i = 1; i < divisions.length; i++) {
+                NumberTriangle nt = new NumberTriangle(Integer.parseInt(divisions[i]));
+                current.add(nt);
+            }
+            int n = 0;
+            for (NumberTriangle nt: previous) {
+                nt.setLeft(current.get(n));
+                nt.setRight(current.get(n + 1));
+            }
+            previous = current;
 
             //read the next line
             line = br.readLine();
