@@ -90,8 +90,12 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+
         NumberTriangle current_number_triangle;
+        if (path.equals("")) {
+            int result = this.getRoot();
+            return result;
+        }
         if (path.charAt(0) == 'l') {
             current_number_triangle = this.left;
         }
@@ -147,7 +151,7 @@ public class NumberTriangle {
 
             String[] divisions = line.split(" ");
             List<NumberTriangle> current = new Vector<>();
-            for (int i = 1; i < divisions.length; i++) {
+            for (int i = 0; i < divisions.length; i++) {
                 NumberTriangle nt = new NumberTriangle(Integer.parseInt(divisions[i]));
                 current.add(nt);
             }
@@ -155,6 +159,7 @@ public class NumberTriangle {
             for (NumberTriangle nt: previous) {
                 nt.setLeft(current.get(n));
                 nt.setRight(current.get(n + 1));
+                n++;
             }
             previous = current;
 
